@@ -5,22 +5,40 @@ let myRole = 'user';
 let myLocation = { lat: 0, lng: 0 };
 const socket = io();
 
+// Define custom icons
+const blueIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+const redIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
 function initMap() {
-    const defaultLoc = { lat: 51.5074, lng: -0.1278 };
+    const defaultLoc = [51.505, -0.09];
 
-    map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 15,
-        center: defaultLoc,
-    });
+    map = L.map('map').setView(defaultLoc, 13);
 
-    marker = new google.maps.Marker({
-        position: defaultLoc,
-        map: map,
-        title: "Your Location",
-        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-    });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    marker = L.marker(defaultLoc, { icon: blueIcon }).addTo(map)
+        .bindPopup('Your Location')
+        .openPopup();
 
     if (navigator.geolocation) {
+        let firstLoad = true;
         navigator.geolocation.watchPosition(
             (position) => {
                 const pos = {
@@ -28,8 +46,13 @@ function initMap() {
                     lng: position.coords.longitude,
                 };
                 myLocation = pos;
-                marker.setPosition(pos);
-                map.setCenter(pos);
+                const latlng = [pos.lat, pos.lng];
+                marker.setLatLng(latlng);
+
+                if (firstLoad) {
+                    map.setView(latlng);
+                    firstLoad = false;
+                }
 
                 socket.emit('update-location', {
                     role: myRole,
@@ -46,17 +69,14 @@ function initMap() {
 
 // Socket.io Events
 socket.on('ambulance-location-update', (data) => {
-    if (data.id === socket.id) return; // Skip if it's me
+    if (data.id === socket.id) return;
 
+    const latlng = [data.lat, data.lng];
     if (!ambulanceMarkers[data.id]) {
-        ambulanceMarkers[data.id] = new google.maps.Marker({
-            position: { lat: data.lat, lng: data.lng },
-            map: map,
-            title: "Ambulance",
-            icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
-        });
+        ambulanceMarkers[data.id] = L.marker(latlng, { icon: redIcon }).addTo(map)
+            .bindPopup('Ambulance');
     } else {
-        ambulanceMarkers[data.id].setPosition({ lat: data.lat, lng: data.lng });
+        ambulanceMarkers[data.id].setLatLng(latlng);
     }
 });
 
@@ -67,7 +87,6 @@ socket.on('receive-message', (data) => {
     alertDiv.innerHTML = `<strong>Ambulance Alert:</strong> ${data.message}`;
     alertContainer.appendChild(alertDiv);
 
-    // Auto-remove alert after 10 seconds
     setTimeout(() => {
         alertDiv.remove();
     }, 10000);
@@ -75,7 +94,7 @@ socket.on('receive-message', (data) => {
 
 socket.on('user-disconnected', (id) => {
     if (ambulanceMarkers[id]) {
-        ambulanceMarkers[id].setMap(null);
+        map.removeLayer(ambulanceMarkers[id]);
         delete ambulanceMarkers[id];
     }
 });
@@ -86,15 +105,14 @@ document.getElementById('role').addEventListener('change', (e) => {
     const ambulanceControls = document.getElementById('ambulance-controls');
     if (myRole === 'ambulance') {
         ambulanceControls.style.display = 'block';
-        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
-        marker.setTitle("Ambulance (Me)");
+        marker.setIcon(redIcon);
+        marker.setPopupContent("Ambulance (Me)");
     } else {
         ambulanceControls.style.display = 'none';
-        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
-        marker.setTitle("Your Location");
+        marker.setIcon(blueIcon);
+        marker.setPopupContent("Your Location");
     }
 
-    // Update role on server
     socket.emit('update-location', {
         role: myRole,
         lat: myLocation.lat,
@@ -114,3 +132,6 @@ document.getElementById('send-btn').addEventListener('click', () => {
         document.getElementById('message-input').value = '';
     }
 });
+
+// Initialize map on load
+window.onload = initMap;

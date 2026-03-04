@@ -36,6 +36,8 @@ io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
     socket.on('update-location', (data) => {
+        const wasAmbulance = users[socket.id] && users[socket.id].role === 'ambulance';
+
         users[socket.id] = {
             id: socket.id,
             role: data.role,
@@ -45,6 +47,9 @@ io.on('connection', (socket) => {
 
         if (data.role === 'ambulance') {
             io.emit('ambulance-location-update', users[socket.id]);
+        } else if (wasAmbulance) {
+            // If they switched from ambulance to user, remove their ambulance marker for others
+            io.emit('user-disconnected', socket.id);
         }
     });
 
