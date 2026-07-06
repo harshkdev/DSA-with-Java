@@ -1,5 +1,5 @@
 import java.util.*;
-public class Creating_2D_Arrays{
+public class TwoDimensionalArrays {
     public static void main(String[] args) {
 
         //Matrix
