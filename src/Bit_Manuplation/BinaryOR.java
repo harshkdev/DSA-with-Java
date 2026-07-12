@@ -2,7 +2,7 @@ package Bit_Manuplation;
 
 public class BinaryOR {
 
-    //Binary OR |
+    //Binary OR (|)
     // 0 | 0 = 1
     // 0 | 1 = 1
     // 1 | 0 = 1
