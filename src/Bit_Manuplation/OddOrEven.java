@@ -13,6 +13,7 @@ public class OddOrEven {
         }
     }
     public static void main (String[] args){
+
         OddOrEven(2);
         OddOrEven(3);
         OddOrEven(11);
