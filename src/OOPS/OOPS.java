@@ -1,4 +1,5 @@
 package OOPS;
+import java.util.*;
 
 public class OOPS {
 
@@ -13,8 +14,21 @@ public class OOPS {
         p1.color = "Yellow";
         System.out.println(p1.color);
 
+        BankAccount myAcc = new BankAccount();
+        myAcc.username = "harshkumar";
+        myAcc.setPassword("abcdefghi");
+
     }
 }
+
+class BankAccount{
+    public String username;
+    private String password;
+    public void setPassword(String pwd){
+        password = pwd;
+    }
+}
+
 class Pen{
     String color;
     int tip;
@@ -36,5 +50,7 @@ class Student {
     void calPercentage(int phy , int chem , int math){
         percentage = (phy + chem + math) / 3;
     }
+
+
 }
 
