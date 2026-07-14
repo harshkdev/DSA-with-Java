@@ -5,10 +5,10 @@ import org.w3c.dom.ls.LSOutput;
 public class Inheritance {
 
     public static void main(String[] args) {
-        Dog dobby = new Dog();
-        dobby.eat();
-        dobby.legs = 4;
-        System.out.println(dobby.legs);
+//        Dog dobby = new Dog();
+//        dobby.eat();
+//        dobby.legs = 4;
+//        System.out.println(dobby.legs);
 
     }
 }
