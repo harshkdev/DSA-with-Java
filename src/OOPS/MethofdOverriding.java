@@ -1,6 +1,6 @@
 package OOPS;
 
-public class MethofdOverriding {
+public class MethodsOverriding {
     public static void main(String[] args) {
         Deer d = new Deer();
         d.eat();
