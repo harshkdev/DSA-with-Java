@@ -1,5 +1,7 @@
 package OOPS;
 
+import org.w3c.dom.ls.LSOutput;
+
 public class Inheritance {
 
     public static void main(String[] args) {
@@ -25,12 +27,26 @@ class Animal {
 }
 
 class Mammals extends Animal {
-    int legs;
+    void walk(){
+        System.out.println("walks");
+    };
 }
 
-class Dog extends Mammals {
-    String breed;
+class Fish extends Animal{
+    void swim(){
+        System.out.println("swim");
+    }
 }
+
+class Birds extends Animal{
+    void walk(){
+        System.out.println("Walk");
+    }
+}
+
+//class Dog extends Mammals {
+//    String breed;
+//}
 
 //Derived class
 //class Fish extends Animal {
