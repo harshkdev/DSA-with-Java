@@ -3,8 +3,11 @@ package OOPS;
 public class Inheritance {
 
     public static void main(String[] args) {
-        Fish shark = new Fish();
-        shark.eat();
+        Dog dobby = new Dog();
+        dobby.eat();
+        dobby.legs = 4;
+        System.out.println(dobby.legs);
+
     }
 }
 
@@ -21,11 +24,19 @@ class Animal {
     }
 }
 
-//Derived class
-class Fish extends Animal {
-    int fins;
-
-    void swims(){
-        System.out.println("swims");
-    }
+class Mammals extends Animal {
+    int legs;
 }
+
+class Dog extends Mammals {
+    String breed;
+}
+
+//Derived class
+//class Fish extends Animal {
+//    int fins;
+//
+//    void swims(){
+//        System.out.println("swims");
+//    }
+//}
