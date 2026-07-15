@@ -1,9 +1,16 @@
 package OOPS;
-import java.util.*;
 
 public class AbstractClass {
     public static void main(String[] args) {
-        Mustang myHorse = new Mustang();
+        Horse h = new Horse();
+        h.eat();
+        h.walk();
+        System.out.println(h.color);
+
+        Chicken c = new Chicken();
+        c.eat();
+        c.walk();
+        System.out.println(h.color);
     }
 }
 
