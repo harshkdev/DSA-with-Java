@@ -1,6 +1,6 @@
 package OOPS;
 
-public class MethodsOverriding {
+public class MethofdOverriding {
     public static void main(String[] args) {
         Deer d = new Deer();
         d.eat();
@@ -14,7 +14,6 @@ class Animals{
 }
 
 class Deer extends Animals{
-    @Override
     void eat() {
         System.out.println("eats grass");
     }
