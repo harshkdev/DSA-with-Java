@@ -13,7 +13,7 @@ public class FirstOccurrence {
     }
 
     public static void main(String[] args) {
-        int arr[] = { 2, 3, 5, 67, 8, 5};
+        int arr[] = { 2, 3, 5, 67, 3, 5};
         int key= 67;
         System.out.println(Occur(arr , key , 0));
     }
