@@ -11,7 +11,7 @@ public class RemoveDuplicate {
         //Work
         char currChar = str.charAt(idx);
         if (map[currChar - 'a'] == true) {
-            //duplicate
+
             removeDuplicates(str, idx + 1, newStr, map);
         } else {
             map[currChar - 'a'] = true;
